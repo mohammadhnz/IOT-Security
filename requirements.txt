@@ -1,1 +1,4 @@
 requests
+paho-mqtt
+tapo
+asyncio-mqtt

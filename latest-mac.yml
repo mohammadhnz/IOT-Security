@@ -1,0 +1,9 @@
+version: 0.3.5
+files:
+  - url: MQTT-Explorer-0.3.5-mac.zip
+    sha512: cIzgv333fOuN28hUl6PJl6C8btmleWJvsi3H/Wsba2+Sv3HPfqbOh3KOpYREiyZx/ycUK8dfI97MQEAG0AE6fw==
+    size: 63415356
+    blockMapSize: 66678
+path: MQTT-Explorer-0.3.5-mac.zip
+sha512: cIzgv333fOuN28hUl6PJl6C8btmleWJvsi3H/Wsba2+Sv3HPfqbOh3KOpYREiyZx/ycUK8dfI97MQEAG0AE6fw==
+releaseDate: '2019-07-17T22:20:57.375Z'

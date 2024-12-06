@@ -11,12 +11,12 @@ os.environ.setdefault('TAPO_IP_ADDRESS', '192.168.1.56')
 
 
 class TapoDeviceManager:
-    def __init__(self, ip_address=None):
+    def __init__(self):
         # Read credentials from environment variables if not provided
         self.tapo_username = os.getenv('TAPO_USERNAME')
         self.tapo_password = os.getenv('TAPO_PASSWORD')
         self.ip_address = os.getenv('TAPO_IP_ADDRESS')
-
+        self.connected = False
         if not self.tapo_username or not self.tapo_password or not self.ip_address:
             raise ValueError("TAPO_USERNAME, TAPO_PASSWORD, and TAPO_IP_ADDRESS must be set either as arguments or environment variables.")
 
@@ -26,6 +26,7 @@ class TapoDeviceManager:
     async def connect(self):
         # Initialize the device object
         self.device = await self.client.p110(self.ip_address)
+        self.connected = True
 
     async def turn_on(self):
         if self.device:

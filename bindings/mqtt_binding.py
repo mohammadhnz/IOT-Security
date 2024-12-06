@@ -1,3 +1,5 @@
+import asyncio
+
 from mqtt.subscriber import MQTTSubscriber
 from tapo_client.m110 import TapoDeviceManager
 
@@ -6,11 +8,15 @@ class M110Binding:
     def __init__(self, topic):
         self.device = TapoDeviceManager()
 
-        async def on_message(client, userdata, msg):
-            if msg=='On':
-                await self.device.turn_on()
-            elif msg=='Off':
-                await self.device.turn_off()
+        def on_message(massage: str):
+            if not self.device.connected:
+                asyncio.run(self.device.connect())
+            print(massage)
+            if massage.lower() == 'on':
+                asyncio.run(self.device.turn_on())
+            elif massage.lower() == 'off':
+                print(1)
+                asyncio.run(self.device.turn_off())
 
         self.subscriber = MQTTSubscriber(topic, on_message=on_message)
 
@@ -18,4 +24,6 @@ class M110Binding:
         self.subscriber.run()
 
 
-M110Binding('Plug').run()
+binding = M110Binding('Plug')
+binding.device.turn_off()
+binding.run()

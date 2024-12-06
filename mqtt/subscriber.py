@@ -3,7 +3,6 @@ import random
 
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
-from asyncio_mqtt import Client
 
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')
@@ -52,9 +51,11 @@ class MQTTSubscriber:
     def subscribe(self):
         def on_message(client, userdata, msg):
             print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
+            massage = msg.payload.decode()
+            self.on_message(massage)
 
         self.client.subscribe(self.topic)
-        self.client.on_message = self.on_message or on_message
+        self.client.on_message = on_message
 
     def run(self):
         # Start the network loop to process network traffic and callbacks

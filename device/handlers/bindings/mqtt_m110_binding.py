@@ -1,6 +1,6 @@
 import asyncio
 
-from tapo_client.m110 import TapoDeviceManager
+from device.handlers.tapo_client.m110 import TapoDeviceManager
 
 
 class M110Binding:

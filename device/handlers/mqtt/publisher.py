@@ -1,11 +1,10 @@
 import os
 import random
-import time
 
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
 
-from bindings.mqtt_water_binding import WaterSensorBinding
+from device.handlers.bindings.mqtt_water_binding import WaterSensorBinding
 
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')

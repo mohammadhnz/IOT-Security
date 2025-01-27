@@ -2,3 +2,4 @@ requests
 paho-mqtt
 tapo
 asyncio-mqtt
+Django==5.1.5

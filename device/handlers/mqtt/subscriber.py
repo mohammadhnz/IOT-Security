@@ -4,7 +4,7 @@ import random
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
 
-from bindings.mqtt_m110_binding import M110Binding
+from device.handlers.bindings.mqtt_m110_binding import M110Binding
 
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')

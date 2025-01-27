@@ -5,11 +5,42 @@ services:
     image: eclipse-mosquitto
     container_name: mosquitto_broker
     ports:
-      - "1883:1883"  # MQTT protocol port
-      - "9001:9001"  # Websockets port
+      - "1883:1883"
+      - "9001:9001"
     volumes:
       - ./mosquitto/:/mosquitto/
 
+  django-runserver:
+    build: .
+    container_name: django-runserver
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mosquitto
+
+  django-subscribe:
+    build: .
+    container_name: django-subscribe
+    command: python manage.py subscribe
+    network_mode: "host"
+    volumes:
+      - .:/app
+    depends_on:
+      - mosquitto
+
+  django-publish:
+    build: .
+    container_name: django-publish
+    command: python manage.py publish
+    network_mode: "host"
+    volumes:
+      - .:/app
+    depends_on:
+      - mosquitto
+
 volumes:
-  mosquitto_data: {}   # Defined as a named volume
-  mosquitto_log: {}    # Defined as a named volume
+  mosquitto_data: {}
+  mosquitto_log: {}

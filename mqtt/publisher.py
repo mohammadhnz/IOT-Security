@@ -5,11 +5,16 @@ import time
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
 
+from bindings.mqtt_water_binding import WaterSensorBinding
+
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')
 os.environ.setdefault('MQTT_BROKER', 'localhost')
 os.environ.setdefault('MQTT_PORT', '1883')
 
+PUBLISHERS = [
+    WaterSensorBinding()
+]
 
 class MQTTPublisher:
     def __init__(self, topic):
@@ -60,19 +65,13 @@ class MQTTPublisher:
 
 
 def main():
-    topic = "python/mqtt"
+    topic = "proxy"
 
     publisher = MQTTPublisher(topic)
     publisher.start()
-
-    msg_count = 1
-    while msg_count <= 5:
-        time.sleep(1)
-        msg = f"Message {msg_count}"
-        publisher.publish(msg)
-        msg_count += 1
-
-    publisher.stop()
+    while True:
+        for pb in PUBLISHERS:
+            pb.execute(publisher)
 
 
 if __name__ == '__main__':

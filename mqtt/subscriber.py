@@ -4,10 +4,16 @@ import random
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
 
+from bindings.mqtt_m110_binding import M110Binding
+
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')
 os.environ.setdefault('MQTT_BROKER', 'localhost')
 os.environ.setdefault('MQTT_PORT', '1883')
+
+SUBSCRIBERS = {
+    M110Binding.PREFIX: M110Binding()
+}
 
 
 class MQTTSubscriber:
@@ -52,7 +58,9 @@ class MQTTSubscriber:
         def on_message(client, userdata, msg):
             print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
             massage = msg.payload.decode()
-            self.on_message(massage)
+            for prefix, subscriber in SUBSCRIBERS.items():
+                if massage.startswith(prefix):
+                    subscriber.on_message(massage.split("#")[1])
 
         self.client.subscribe(self.topic)
         self.client.on_message = on_message
@@ -61,11 +69,13 @@ class MQTTSubscriber:
         # Start the network loop to process network traffic and callbacks
         self.client.loop_forever()
 
+
 def main():
-    topic = "python/mqtt"
+    topic = "proxy-sub"
 
     subscriber = MQTTSubscriber(topic)
     subscriber.run()
+
 
 if __name__ == '__main__':
     main()

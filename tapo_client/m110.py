@@ -7,7 +7,7 @@ from tapo.requests import EnergyDataInterval
 
 os.environ.setdefault('TAPO_USERNAME', 'hmohammadali2013@gmail.com')
 os.environ.setdefault('TAPO_PASSWORD', 'Akljsdkv834183')
-os.environ.setdefault('TAPO_IP_ADDRESS', '192.168.1.56')
+os.environ.setdefault('TAPO_IP_ADDRESS', '192.168.1.50')
 
 
 class TapoDeviceManager:

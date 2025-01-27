@@ -1,11 +1,12 @@
 import asyncio
 
-from mqtt.subscriber import MQTTSubscriber
 from tapo_client.m110 import TapoDeviceManager
 
 
 class M110Binding:
-    def __init__(self, topic):
+    PREFIX = 'M110'
+
+    def __init__(self):
         self.device = TapoDeviceManager()
 
         def on_message(massage: str):
@@ -18,12 +19,4 @@ class M110Binding:
                 print(1)
                 asyncio.run(self.device.turn_off())
 
-        self.subscriber = MQTTSubscriber(topic, on_message=on_message)
-
-    def run(self):
-        self.subscriber.run()
-
-
-binding = M110Binding('Plug')
-binding.device.turn_off()
-binding.run()
+        self.on_message = on_message

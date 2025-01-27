@@ -3,3 +3,4 @@ paho-mqtt
 tapo
 asyncio-mqtt
 Django==5.1.5
+djangorestframework==3.15.2

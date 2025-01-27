@@ -1,10 +1,11 @@
 import os
 import random
+from datetime import timedelta, datetime
 
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
 
-from device.models import Device, DeviceType
+from device.models import Device, DeviceType, Noise, SilencedEvent, Action
 
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')
@@ -61,7 +62,18 @@ class MQTTSubscriber:
                 print(prefix)
                 subscriber = device.device_type.subscriber
                 if massage.startswith(prefix):
-                    subscriber.on_message(device, massage.split("#")[2])
+                    action = massage.split("#")[2]
+                    noises = Noise.objects.filter(created_at__gte=datetime.now() - timedelta(seconds=2))
+                    if noises.exists():
+                        print(f"Silenced event: {massage}")
+                        for noise in noises:
+                            SilencedEvent.objects.create(
+                                noise=noise,
+                                action=Action.objects.get(device_type=device.device_type, name=action)
+                            )
+                            print('zx')
+                        continue
+                    subscriber.on_message(device, action)
                     print(f'processed {massage.split("#")[2]}')
             # for prefix, subscriber in SUBSCRIBERS.items():
             #     if massage.startswith(prefix):
@@ -70,8 +82,10 @@ class MQTTSubscriber:
         self.client.subscribe(self.topic)
         self.client.on_message = on_message
 
+    def is_there_active_noise_in_system(self):
+        return Noise.objects.filter(created_at__gte=datetime.now() - timedelta(seconds=2)).exists()
+
     def run(self):
-        # Start the network loop to process network traffic and callbacks
         self.client.loop_forever()
 
 

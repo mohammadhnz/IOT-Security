@@ -47,9 +47,11 @@ class Device(models.Model):
 
 class Noise(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='noises')
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='noises')
     created_at = models.DateTimeField(auto_now_add=True)
 
 
 class SilencedEvent(models.Model):
     noise = models.ForeignKey(Noise, on_delete=models.CASCADE, related_name='silenced_events')
+    action = models.ForeignKey(Action, on_delete=models.CASCADE, related_name='silenced_events')
     created_at = models.DateTimeField(auto_now_add=True)

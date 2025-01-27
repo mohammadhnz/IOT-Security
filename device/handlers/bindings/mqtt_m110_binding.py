@@ -9,7 +9,7 @@ class M110Binding:
     def __init__(self):
         self.device = TapoDeviceManager()
 
-        def on_message(massage: str):
+        def on_message(device, massage: str):
             if not self.device.connected:
                 asyncio.run(self.device.connect())
             print(massage)

@@ -4,13 +4,11 @@ from time import sleep
 
 
 class WaterSensorBinding:
-    PREFIX = 'wx'
-
-    def execute(self, publisher):
+    def execute(self, publisher, prefix):
         if randint(1, 4) % 3 < 2:
-            publisher.publish(self.PREFIX + "#" + 'wet')
-            print('wx#wet')
+            publisher.publish(prefix + 'wet')
+            print(prefix + 'wet')
         else:
-            publisher.publish(self.PREFIX + "#" + 'dry')
-            print('wx#dry')
+            publisher.publish(prefix + 'dry')
+            print(prefix + 'dry')
         sleep(2)

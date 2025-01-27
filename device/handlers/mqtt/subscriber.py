@@ -4,16 +4,12 @@ import random
 from paho.mqtt import client as mqtt_client
 from paho.mqtt.enums import CallbackAPIVersion
 
-from device.handlers.bindings.mqtt_m110_binding import M110Binding
+from device.models import Device, DeviceType
 
 os.environ.setdefault('MQTT_USERNAME', 'mqtt_user')
 os.environ.setdefault('MQTT_PASSWORD', '123456')
 os.environ.setdefault('MQTT_BROKER', 'localhost')
 os.environ.setdefault('MQTT_PORT', '1883')
-
-SUBSCRIBERS = {
-    M110Binding.PREFIX: M110Binding()
-}
 
 
 class MQTTSubscriber:
@@ -58,9 +54,18 @@ class MQTTSubscriber:
         def on_message(client, userdata, msg):
             print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
             massage = msg.payload.decode()
-            for prefix, subscriber in SUBSCRIBERS.items():
+            devices = Device.objects.filter(device_type__role__in=['subscriber', 'both'])
+            print(len(devices))
+            for device in devices:
+                prefix = f"{device.device_type.prefix}#{device.id}#"
+                print(prefix)
+                subscriber = device.device_type.subscriber
                 if massage.startswith(prefix):
-                    subscriber.on_message(massage.split("#")[1])
+                    subscriber.on_message(device, massage.split("#")[2])
+                    print(f'processed {massage.split("#")[2]}')
+            # for prefix, subscriber in SUBSCRIBERS.items():
+            #     if massage.startswith(prefix):
+            #         subscriber.on_message(massage.split("#")[1])
 
         self.client.subscribe(self.topic)
         self.client.on_message = on_message

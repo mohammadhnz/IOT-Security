@@ -15,6 +15,7 @@ PUBLISHERS = [
     WaterSensorBinding()
 ]
 
+
 class MQTTPublisher:
     def __init__(self, topic):
         self.broker = os.environ.get('MQTT_BROKER')

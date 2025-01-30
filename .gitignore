@@ -2,4 +2,7 @@ openhab_userdata
 mosquitto
 mosquitto.conf
 .idea
+.idea/
+myenv
+matter
 /device/handlers/mqtt/__pycache__/

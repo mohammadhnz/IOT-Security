@@ -41,6 +41,18 @@ services:
     depends_on:
       - mosquitto
 
+  matter-server:
+    image: ghcr.io/home-assistant-libs/python-matter-server:stable
+    container_name: matter-server
+    restart: unless-stopped
+    security_opt:
+      - apparmor:unconfined
+    ports:
+      - "5580:5580"
+    volumes:
+      - ./matter/data:/data
+      - /run/dbus:/run/dbus:ro
+
 volumes:
   mosquitto_data: {}
   mosquitto_log: {}

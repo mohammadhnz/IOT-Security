@@ -26,12 +26,14 @@ def create_noise_view(request):
 
     return Response({"noise_id": noise.id}, status=status.HTTP_201_CREATED)
 
+
 @api_view(['GET'])
 def list_silenced_events_by_noise(request, noise_id):
     noise = get_object_or_404(Noise, pk=noise_id)
     silenced_events = SilencedEvent.objects.filter(noise=noise)
     serializer = SilencedEventSerializer(silenced_events, many=True)
     return Response(serializer.data)
+
 
 @api_view(['GET'])
 def list_devices_with_actions(request):
